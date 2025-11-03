@@ -1,6 +1,6 @@
-// Enhanced Mobile-Optimized JavaScript
+// Mobile-Optimized JavaScript - Desktop remains unchanged
 document.addEventListener('DOMContentLoaded', function () {
-    // Dark Mode Toggle
+    // Your existing dark mode code - KEEP AS IS
     const darkModeToggle = document.getElementById('darkModeToggle');
 
     if (!darkModeToggle) {
@@ -11,7 +11,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const toggleIcon = darkModeToggle.querySelector('i');
     const toggleText = darkModeToggle.querySelector('span');
 
-    // Check for saved theme or prefer-color-scheme
     const savedTheme = localStorage.getItem('theme');
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
 
@@ -41,16 +40,79 @@ document.addEventListener('DOMContentLoaded', function () {
         localStorage.setItem('theme', 'light');
     }
 
-    // Mobile Navigation Functionality
-    initMobileNavigation();
+    // === MOBILE-ONLY ENHANCEMENTS ===
+    if (window.innerWidth <= 768) {
+        initMobileDropdown();
+        initMobileNavigation();
+    }
 
-    // Resources Page Tab Functionality
-    initResourcesTabs();
+    // Your existing resources tabs code - KEEP AS IS
+    const tabLinks = document.querySelectorAll('.tab-link');
+    const resourceSections = document.querySelectorAll('.resource-section');
 
-    // Active Navigation State
-    setActiveNavigation();
+    if (tabLinks.length > 0) {
+        const hash = window.location.hash;
+        if (hash) {
+            switchTab(hash.substring(1));
+        }
 
-    // System Theme Listener
+        tabLinks.forEach(tab => {
+            tab.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = this.getAttribute('href').substring(1);
+                switchTab(target);
+                history.pushState(null, null, `#${target}`);
+            });
+        });
+
+        function switchTab(target) {
+            tabLinks.forEach(tab => {
+                tab.classList.remove('active');
+                if (tab.getAttribute('href') === `#${target}`) {
+                    tab.classList.add('active');
+                }
+            });
+
+            resourceSections.forEach(section => {
+                section.classList.remove('active');
+                if (section.id === target) {
+                    section.classList.add('active');
+                }
+            });
+        }
+
+        window.addEventListener('popstate', function () {
+            const hash = window.location.hash.substring(1);
+            if (hash) {
+                switchTab(hash);
+            }
+        });
+    }
+
+    // Your existing active navigation code - KEEP AS IS
+    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+    const navLinks = document.querySelectorAll('.nav-link');
+
+    navLinks.forEach(link => {
+        const linkPage = link.getAttribute('href');
+        if (linkPage === currentPage ||
+            (currentPage === 'index.html' && (linkPage === 'index.html' || linkPage === '#')) ||
+            (currentPage === 'resources.html' && linkPage.includes('resources.html'))) {
+            link.classList.add('active');
+        } else {
+            link.classList.remove('active');
+        }
+    });
+
+    const resourcesDropdown = document.querySelector('.resources-dropdown');
+    if (resourcesDropdown && currentPage === 'resources.html') {
+        const resourcesBtn = resourcesDropdown.querySelector('.resources-btn');
+        if (resourcesBtn) {
+            resourcesBtn.classList.add('active');
+        }
+    }
+
+    // System theme listener - KEEP AS IS
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
         if (!localStorage.getItem('theme')) {
             if (e.matches) {
@@ -62,168 +124,44 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-function initMobileNavigation() {
-    const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
-    const navLinks = document.querySelector('.nav-links');
+// Mobile-only functions
+function initMobileDropdown() {
     const resourcesBtn = document.querySelector('.resources-btn');
     const dropdown = document.querySelector('.dropdown-content');
 
-    // Create mobile menu button if it doesn't exist
-    if (!mobileMenuBtn && window.innerWidth <= 768) {
-        const newMobileBtn = document.createElement('button');
-        newMobileBtn.className = 'mobile-menu-btn';
-        newMobileBtn.innerHTML = '<i class="fas fa-bars"></i>';
-        document.querySelector('.nav-container').appendChild(newMobileBtn);
-
-        newMobileBtn.addEventListener('click', function () {
-            navLinks.classList.toggle('active');
-        });
-    }
-
-    // Enhanced dropdown functionality for mobile
     if (resourcesBtn && dropdown) {
-        const resourcesDropdown = resourcesBtn.closest('.resources-dropdown');
+        // Hide dropdown by default on mobile
+        dropdown.style.display = 'none';
 
         resourcesBtn.addEventListener('click', function (e) {
-            if (window.innerWidth <= 768) {
-                e.preventDefault();
-                e.stopPropagation();
-                dropdown.classList.toggle('active');
-
-                // Close other dropdowns if open
-                document.querySelectorAll('.dropdown-content.active').forEach(otherDropdown => {
-                    if (otherDropdown !== dropdown) {
-                        otherDropdown.classList.remove('active');
-                    }
-                });
-            }
+            e.stopPropagation();
+            const isVisible = dropdown.style.display === 'block';
+            dropdown.style.display = isVisible ? 'none' : 'block';
         });
 
-        // Close dropdowns when clicking outside
+        // Close dropdown when clicking outside
         document.addEventListener('click', function (e) {
-            if (window.innerWidth <= 768) {
-                if (resourcesDropdown && !resourcesDropdown.contains(e.target)) {
-                    dropdown.classList.remove('active');
-                }
-                if (navLinks && !e.target.closest('.nav-container')) {
-                    navLinks.classList.remove('active');
-                }
+            if (!resourcesBtn.contains(e.target) && !dropdown.contains(e.target)) {
+                dropdown.style.display = 'none';
             }
         });
 
-        // Close dropdown after link selection
+        // Close dropdown after link click
         dropdown.addEventListener('click', function (e) {
             if (e.target.tagName === 'A') {
                 setTimeout(() => {
-                    dropdown.classList.remove('active');
-                    if (navLinks) navLinks.classList.remove('active');
+                    dropdown.style.display = 'none';
                 }, 300);
             }
         });
     }
-
-    // Handle window resize
-    window.addEventListener('resize', function () {
-        if (window.innerWidth > 768) {
-            if (navLinks) navLinks.classList.remove('active');
-            if (dropdown) dropdown.classList.remove('active');
-        }
-    });
 }
 
-function initResourcesTabs() {
-    const tabLinks = document.querySelectorAll('.tab-link');
-    const resourceSections = document.querySelectorAll('.resource-section');
+function initMobileNavigation() {
+    // Add touch-friendly improvements
+    const allButtons = document.querySelectorAll('button, a, .resource-link, .tab-link');
 
-    if (tabLinks.length === 0) return;
-
-    // Check URL hash on page load
-    const hash = window.location.hash;
-    if (hash) {
-        switchTab(hash.substring(1));
-    }
-
-    tabLinks.forEach(tab => {
-        tab.addEventListener('click', function (e) {
-            e.preventDefault();
-            const target = this.getAttribute('href').substring(1);
-            switchTab(target);
-            history.pushState(null, null, `#${target}`);
-
-            // Close mobile menu if open
-            const navLinks = document.querySelector('.nav-links');
-            if (navLinks && window.innerWidth <= 768) {
-                navLinks.classList.remove('active');
-            }
-        });
-    });
-
-    function switchTab(target) {
-        // Update active tab
-        tabLinks.forEach(tab => {
-            tab.classList.remove('active');
-            if (tab.getAttribute('href') === `#${target}`) {
-                tab.classList.add('active');
-            }
-        });
-
-        // Show active section
-        resourceSections.forEach(section => {
-            section.classList.remove('active');
-            if (section.id === target) {
-                section.classList.add('active');
-
-                // Scroll to section on mobile
-                if (window.innerWidth <= 768) {
-                    setTimeout(() => {
-                        section.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    }, 100);
-                }
-            }
-        });
-    }
-
-    // Handle browser back/forward buttons
-    window.addEventListener('popstate', function () {
-        const hash = window.location.hash.substring(1);
-        if (hash) {
-            switchTab(hash);
-        }
+    allButtons.forEach(button => {
+        button.style.cursor = 'pointer';
     });
 }
-
-function setActiveNavigation() {
-    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
-    const navLinks = document.querySelectorAll('.nav-link');
-
-    navLinks.forEach(link => {
-        const linkPage = link.getAttribute('href');
-        if (linkPage === currentPage ||
-            (currentPage === 'index.html' && (linkPage === 'index.html' || linkPage === '/')) ||
-            (currentPage === 'resources.html' && linkPage.includes('resources.html'))) {
-            link.classList.add('active');
-        } else {
-            link.classList.remove('active');
-        }
-    });
-
-    // Handle resources dropdown active state
-    const resourcesDropdown = document.querySelector('.resources-dropdown');
-    if (resourcesDropdown && currentPage === 'resources.html') {
-        const resourcesBtn = resourcesDropdown.querySelector('.resources-btn');
-        if (resourcesBtn) {
-            resourcesBtn.classList.add('active');
-        }
-    }
-}
-
-// Add touch event improvements for mobile
-document.addEventListener('touchstart', function () { }, { passive: true });
-
-// Prevent zoom on double-tap (iOS)
-document.addEventListener('touchend', function (e) {
-    if (e.touches && e.touches.length < 2) {
-        return;
-    }
-    e.preventDefault();
-}, { passive: false });
