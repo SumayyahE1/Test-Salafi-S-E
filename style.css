@@ -2732,3 +2732,211 @@ body.dark-mode .back-link a:hover {
         font-size: 1.5rem;
     }
 }
+/* Mobile Styles for About and Contact Pages */
+@media (max-width: 768px) {
+    /* About Page Mobile */
+    .about-page,
+    .contact-page {
+        padding: 1rem;
+    }
+
+    .about-content,
+    .contact-content,
+    .faq-section {
+        padding: 1.5rem;
+        margin: 0.5rem;
+    }
+
+    .contact-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    .features-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .feature-card {
+        padding: 1.5rem 1rem;
+    }
+
+    .principle-item {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+        padding: 1.2rem;
+    }
+
+    .contact-method {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+        padding: 1.2rem;
+    }
+
+    .contact-form {
+        padding: 1.5rem;
+    }
+
+    .about-section h2,
+    .contact-info h2,
+    .contact-form-section h2,
+    .faq-section h2 {
+        font-size: 1.5rem;
+    }
+
+    .about-section {
+        margin-bottom: 2rem;
+    }
+
+    /* Improved touch targets for form elements */
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        min-height: 44px;
+        font-size: 16px; /* Prevents zoom on iOS */
+    }
+
+    .submit-btn {
+        min-height: 44px;
+        width: 100%;
+        justify-content: center;
+    }
+
+    /* FAQ mobile improvements */
+    .faq-item {
+        padding: 1.2rem;
+    }
+
+    /* Back link mobile */
+    .back-link a {
+        padding: 0.8rem 1.5rem;
+        display: block;
+        margin: 0 auto;
+        max-width: 200px;
+    }
+}
+
+@media (max-width: 480px) {
+    .about-content,
+    .contact-content,
+    .faq-section {
+        padding: 1rem;
+    }
+
+    .feature-card {
+        padding: 1.2rem 0.8rem;
+    }
+
+    .principle-item,
+    .contact-method,
+    .faq-item {
+        padding: 1rem;
+    }
+
+    .contact-form {
+        padding: 1rem;
+    }
+
+    .about-section h2,
+    .contact-info h2,
+    .contact-form-section h2,
+    .faq-section h2 {
+        font-size: 1.3rem;
+    }
+}
+
+/* Ensure proper mobile navigation works on all pages */
+@media (max-width: 768px) {
+    /* These should apply to all pages including new ones */
+    .nav-container {
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1rem;
+    }
+
+    .nav-links {
+        flex-direction: column;
+        width: 100%;
+        gap: 0.5rem;
+    }
+
+    .nav-link,
+    .resources-btn {
+        width: 100%;
+        text-align: center;
+        padding: 1rem;
+        border-bottom: 1px solid rgba(0,0,0,0.1);
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .nav-link:last-child,
+    .resources-btn:last-child {
+        border-bottom: none;
+    }
+
+    .resources-dropdown {
+        width: 100%;
+    }
+
+    .dropdown-content {
+        position: static;
+        width: 100%;
+        box-shadow: none;
+        border: 1px solid rgba(0,0,0,0.1);
+        margin-top: 0.5rem;
+        border-radius: 8px;
+    }
+
+    .dropdown-content a {
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid rgba(0,0,0,0.05);
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+    }
+
+    .dropdown-content a:last-child {
+        border-bottom: none;
+    }
+
+    .theme-toggle {
+        width: 100%;
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid rgba(0,0,0,0.1);
+    }
+
+    .toggle-btn {
+        width: 100%;
+        justify-content: center;
+        min-height: 44px;
+    }
+
+    /* Header mobile optimization for all pages */
+    .header {
+        padding: 1.5rem 1rem;
+        margin: 0.5rem;
+    }
+
+    .bismillah {
+        font-size: 1.4rem;
+    }
+
+    .title {
+        font-size: 1.8rem;
+    }
+
+    .arabic-title {
+        font-size: 1.5rem;
+    }
+
+    .subtitle {
+        font-size: 0.9rem;
+        padding: 0 0.5rem;
+    }
+}
